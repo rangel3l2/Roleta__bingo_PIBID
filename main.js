@@ -10,42 +10,50 @@ var removeItemAndRebuildWheel;
 var rebuildWheel;
 
 $(document).ready(function(){
+    // Create hint panel and wrapper at the beginning
+    const fullscreenHint = $('<div>').addClass('fullscreen-hint');
+    const roletaWrapper = $('<div>').attr('id', 'roleta-wrapper');
+    
+    // Add elements to DOM
+    $('#roleta').wrap(roletaWrapper);
+    $('#container').prepend(fullscreenHint);
+    
     var recordingHistory = false;
     var historyItems = [];                                                              
 
     // Dados da roleta
     wheelItems = [
-        { text: "AG", fullscreenText: "AGAIN", explanation: "Você tem direito a uma nova rodada! Gire novamente." },
-        { text: "1", fullscreenText: "1", explanation: "Vesícula Seminal: Glândula que produz parte do líquido seminal, rico em nutrientes para os espermatozoides." },
-        { text: "2", fullscreenText: "2", explanation: "Tubas Uterinas: Tubos que conectam os ovários ao útero e são local de fecundação." },
-        { text: "3", fullscreenText: "3", explanation: "Ovários: Glândulas femininas que produzem ovócitos e hormônios sexuais." },
-        { text: "4", fullscreenText: "4", explanation: "Vagina: Canal que conecta o útero ao exterior, por onde passam os espermatozoides e a menstruação e por onde ocorre o parto." },
-        { text: "5", fullscreenText: "5", explanation: "Epidídimo: Local onde os espermatozoides amadurecem e são armazenados." },
-        { text: "6", fullscreenText: "6", explanation: "Uretra: Canal pelo qual a urina e o sêmen são expelidos no sistema reprodutor masculino." },
-        { text: "7", fullscreenText: "7", explanation: "Período Fértil: Fase do ciclo menstrual com maior chance de engravidar, ocorrendo em torno da ovulação." },
-        { text: "AG", fullscreenText: "AGAIN", explanation: "Você tem direito a uma nova rodada! Gire novamente." },
-        { text: "8", fullscreenText: "8", explanation: "Endométrio: Camada interna do útero onde o embrião se implanta; é descamado durante a menstruação se não houver fecundação." },
-        { text: "9", fullscreenText: "9", explanation: "Testículos: Órgãos que produzem espermatozoides e testosterona, fundamentais para a reprodução e desenvolvimento de características sexuais masculinas." },
-        { text: "10", fullscreenText: "10", explanation: "Bolsa Escrotal: Bolsa que contém e protege os testículos, regulando sua temperatura para a produção de espermatozoides." },
-        { text: "11", fullscreenText: "11", explanation: "Menstruação: Descamação periódica do endométrio, parte do ciclo menstrual feminino." },
-        { text: "12", fullscreenText: "12", explanation: "Ductos Deferentes: Canais que transportam espermatozoides dos testículos até a uretra." },
-        { text: "13", fullscreenText: "13", explanation: "Ejaculação: Processo pelo qual o sêmen é expelido através da uretra durante o orgasmo." },
-        { text: "AG", fullscreenText: "AGAIN", explanation: "Você tem direito a uma nova rodada! Gire novamente." },
-        { text: "14", fullscreenText: "14", explanation: "Sêmen: Fluido que contém espermatozoides e é liberado durante a ejaculação." },
-        { text: "15", fullscreenText: "15", explanation: "Fecundação: União do gameta masculino (espermatozoide) com o gameta feminino (ovócito) para formar um novo ser." },
-        { text: "16", fullscreenText: "16", explanation: "Pênis: Órgão masculino responsável pela excreção de urina e deposição do sêmen no trato reprodutivo feminino." },
-        { text: "17", fullscreenText: "17", explanation: "Útero: Órgão muscular feminino onde o feto se desenvolve durante a gravidez." },
-        { text: "18", fullscreenText: "18", explanation: "Próstata: Glândula masculina que produz parte do líquido seminal e envolve a uretra." },
-        { text: "19", fullscreenText: "19", explanation: "Espermatozoide: Célula reprodutora masculina que fecunda o óvulo." },
-        { text: "AG", fullscreenText: "AGAIN", explanation: "Você tem direito a uma nova rodada! Gire novamente." },
-        { text: "20", fullscreenText: "20", explanation: "Óvulo: Célula reprodutora feminina que, quando fecundada, desenvolve-se em um embrião." },
-        { text: "21", fullscreenText: "21", explanation: "Clitóris: Órgão feminino altamente sensível, importante para o prazer sexual." },
-        { text: "22", fullscreenText: "22", explanation: "Lábios Vaginais: Dobras de pele que protegem a entrada da vagina." },
-        { text: "23", fullscreenText: "23", explanation: "Vulva: Conjunto de órgãos genitais externos femininos." },
-        { text: "24", fullscreenText: "24", explanation: "Hormônios Sexuais: Substâncias que regulam as funções reprodutivas e características sexuais secundárias." },
-        { text: "25", fullscreenText: "25", explanation: "Puberdade: Período de desenvolvimento em que o corpo se torna capaz de reprodução." },
-        { text: "26", fullscreenText: "26", explanation: "Placenta: Órgão temporário que fornece oxigênio e nutrientes ao feto durante a gravidez." },
-        { text: "27", fullscreenText: "27", explanation: "Cordão Umbilical: Estrutura que conecta o feto à placenta, transportando nutrientes e resíduos." }
+        { text: "AG", fullscreenText: "AGAIN", term: "", explanation: "Você tem direito a uma nova rodada! Gire novamente." },
+        { text: "1", fullscreenText: "1", term: "Vesícula Seminal", explanation: "Glândula que produz parte do líquido seminal, rico em nutrientes para os espermatozoides." },
+        { text: "2", fullscreenText: "2", term: "Tubas Uterinas", explanation: "Tubos que conectam os ovários ao útero e são local de fecundação." },
+        { text: "3", fullscreenText: "3", term: "Ovários", explanation: "Glândulas femininas que produzem ovócitos e hormônios sexuais." },
+        { text: "4", fullscreenText: "4", term: "Vagina", explanation: "Canal que conecta o útero ao exterior, por onde passam os espermatozoides e a menstruação e por onde ocorre o parto." },
+        { text: "5", fullscreenText: "5", term: "Epidídimo", explanation: "Local onde os espermatozoides amadurecem e são armazenados." },
+        { text: "6", fullscreenText: "6", term: "Pênis", explanation: "Canal pelo qual a urina e o sêmen são expelidos no sistema reprodutor masculino." },
+        { text: "7", fullscreenText: "7", term: "Janela da Fertilidade", explanation: "Fase do ciclo menstrual com maior chance de engravidar, ocorrendo em torno da ovulação." },
+        { text: "AG", fullscreenText: "AGAIN", term: "", explanation: "Você tem direito a uma nova rodada! Gire novamente." },
+        { text: "8", fullscreenText: "8", term: "Endométrio", explanation: "Camada interna do útero onde o embrião se implanta; é descamado durante a menstruação se não houver fecundação." },
+        { text: "9", fullscreenText: "9", term: "Testículos", explanation: "Órgãos que produzem espermatozoides e testosterona, fundamentais para a reprodução e desenvolvimento de características sexuais masculinas." },
+        { text: "10", fullscreenText: "10", term: "Escroto", explanation: "Bolsa que contém e protege os testículos, regulando sua temperatura para a produção de espermatozoides." },
+        { text: "11", fullscreenText: "11", term: "Menstruação", explanation: "Descamação periódica do endométrio, parte do ciclo menstrual feminino." },
+        { text: "12", fullscreenText: "12", term: "Ductos deferentes", explanation: "Canais que transportam espermatozoides dos testículos até a uretra." },
+        { text: "13", fullscreenText: "13", term: "Ejaculação", explanation: "Processo pelo qual o sêmen é expelido através da uretra durante o orgasmo." },
+        { text: "AG", fullscreenText: "AGAIN", term: "", explanation: "Você tem direito a uma nova rodada! Gire novamente." },
+        { text: "14", fullscreenText: "14", term: "Sêmen", explanation: "Fluido que contém espermatozoides e é liberado durante a ejaculação." },
+        { text: "15", fullscreenText: "15", term: "Fecundação", explanation: "União do gameta masculino (espermatozoide) com o gameta feminino (ovócito) para formar um novo ser." },
+        { text: "16", fullscreenText: "16", term: "Uretra", explanation: "Órgão masculino responsável pela excreção de urina e deposição do sêmen no trato reprodutivo feminino." },
+        { text: "17", fullscreenText: "17", term: "Útero", explanation: "Órgão muscular feminino onde o feto se desenvolve durante a gravidez." },
+        { text: "18", fullscreenText: "18", term: "Próstata", explanation: "Glândula masculina que produz parte do líquido seminal e envolve a uretra." },
+        { text: "19", fullscreenText: "19", term: "Espermatozoide", explanation: "Célula reprodutora masculina que fecunda o óvulo." },
+        { text: "AG", fullscreenText: "AGAIN", term: "", explanation: "Você tem direito a uma nova rodada! Gire novamente." },
+        { text: "20", fullscreenText: "20", term: "Óvulo", explanation: "Célula reprodutora feminina que, quando fecundada, desenvolve-se em um embrião." },
+        { text: "21", fullscreenText: "21", term: "Clitóris", explanation: "Órgão feminino altamente sensível, importante para o prazer sexual." },
+        { text: "22", fullscreenText: "22", term: "Hímens", explanation: "Dobras de pele que protegem a entrada da vagina." },
+        { text: "23", fullscreenText: "23", term: "Genitais Femininos Externos", explanation: "Conjunto de órgãos genitais externos femininos." },
+        { text: "24", fullscreenText: "24", term: "Hormônios Sexuais", explanation: "Substâncias que regulam as funções reprodutivas e características sexuais secundárias." },
+        { text: "25", fullscreenText: "25", term: "Puberdade", explanation: "Período de desenvolvimento em que o corpo se torna capaz de reprodução." },
+        { text: "26", fullscreenText: "26", term: "Placenta", explanation: "Órgão temporário que fornece oxigênio e nutrientes ao feto durante a gravidez." },
+        { text: "27", fullscreenText: "27", term: "Cordão Umbilical", explanation: "Estrutura que conecta o feto à placenta, transportando nutrientes e resíduos." }
     ];
 
     // Geração dinâmica das seções da roleta
@@ -176,21 +184,26 @@ $(document).ready(function(){
                     bullet.style.transform = `translate(${targetX}px, ${targetY}px)`;
                     selectedText.addClass('selected');
                     
-                    // Remover a bolinha após a animação e mostrar o modal
+                    // Remover a bolinha após a animação e mostrar o modal/hint
                     setTimeout(() => {
                         bullet.remove();
-                        modalResult.innerHTML = `<h3>${item.fullscreenText}</h3><p>${item.explanation}</p>`;
-                        showModal();
+                        if (document.fullscreenElement) {
+                            fullscreenHint.html(`<p>${item.explanation}</p>`);
+                            setTimeout(() => fullscreenHint.addClass('show'), 100);
+                            
+                            setTimeout(() => {
+                                fullscreenHint.removeClass('show');
+                            }, 5000);
+                        } else {
+                            modalResult.innerHTML = `<p>${item.explanation}</p>`;
+                            showModal();
+                        }
                         
                         // Se não for "AGAIN", remover o item da roleta
                         if (item.text !== "AG") {
-                            // Adicionamos um pequeno atraso para que a remoção ocorra após o modal ser mostrado
                             setTimeout(() => {
-                                // Agora a função está acessível globalmente
                                 if (typeof removeItemAndRebuildWheel === 'function') {
                                     removeItemAndRebuildWheel(resultado);
-                                } else {
-                                    console.error("A função removeItemAndRebuildWheel não está definida");
                                 }
                             }, 500);
                         }
@@ -247,133 +260,206 @@ $(document).ready(function(){
             $('#spin').click();
         }
     });
-});
+    
+    // Create controls container and buttons
+    const fullscreenControls = $('<div>').addClass('fullscreen-controls');
+    const spinButtonFullscreen = $('<button>')
+        .addClass('spin-button-fullscreen')
+        .text('Girar Roleta')
+        .click(function() {
+            if (!spinning) {
+                $('#spin').click();
+            }
+        });
+    
+    const exitFullscreenButton = $('<button>')
+        .addClass('exit-fullscreen-button')
+        .text('Sair da Tela Cheia')
+        .click(() => {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        });
 
-// Fullscreen functionality
-const fullscreenButton = document.querySelector('.fullscreen-button');
-const container = document.getElementById('container');
+    fullscreenControls.append(spinButtonFullscreen, exitFullscreenButton);
+    $('#container').append(fullscreenControls);
 
-fullscreenButton.addEventListener('click', () => {
-    if (!document.fullscreenElement) {
-        if (container.requestFullscreen) {
-            container.requestFullscreen();
-        } else if (container.webkitRequestFullscreen) {
-            container.webkitRequestFullscreen();
-        } else if (container.msRequestFullscreen) {
-            container.msRequestFullscreen();
+    // Add keyboard support
+    $(document).keydown(function(e) {
+        if (document.fullscreenElement && e.key === 'Enter') {
+            e.preventDefault(); // Prevent default Enter behavior
+            if (!spinning) {
+                $('#spin').click();
+            }
         }
-        container.classList.add('fullscreen');
-    } else {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-        }
-        container.classList.remove('fullscreen');
-    }
-});
+    });
 
-document.addEventListener('fullscreenchange', () => {
-    if (!document.fullscreenElement) {
-        container.classList.remove('fullscreen');
-    }
-});
-
-// Create history panel after fullscreen button is initialized
-$(document).ready(function() {
-    var recordingHistory = false;
-    var historyItems = [];
-    var historyVisible = false;
-    
-    // Create history panel
-    var historyPanel = $('<div>').attr('id', 'history-panel').addClass('history-panel history-collapsed');
-    var historyHeader = $('<div>').addClass('history-header');
-    var historyTitle = $('<h3>').text('Histórico');
-    
-    // Melhorar o botão de alternância com ícone e tooltip
-    var toggleButton = $('<button>')
-        .addClass('toggle-history-button')
-        .attr('title', 'Mostrar histórico')
-        .html('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
-    
-    historyHeader.append(historyTitle, toggleButton);
-    
-    var historyContent = $('<div>').addClass('history-content');
-    var historyList = $('<div>').addClass('history-list');
-    var historyControls = $('<div>').addClass('history-controls');
-    
-    // Create start and stop buttons with improved design
-    var startButton = $('<button>').addClass('history-button start-button')
-        .html('<div class="button-content"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg><span>Iniciar</span></div>')
-        .attr('title', 'Começar a registrar resultados');
-        
-    var stopButton = $('<button>').addClass('history-button stop-button')
-        .html('<div class="button-content"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg><span>Parar</span></div>')
-        .attr('title', 'Parar de registrar e limpar histórico')
-        .prop('disabled', true);
-    
-    historyControls.append(startButton, stopButton);
-    historyContent.append(historyList, historyControls);
-    historyPanel.append(historyHeader, historyContent);
-    
-    // Ocultar o conteúdo inicialmente
-    historyContent.hide();
-    
-    // Create a wrapper div for center alignment
-    var centerWrapper = $('<div>').addClass('history-center-wrapper');
-    centerWrapper.append(historyPanel);
-    
-    // Insert after fullscreen button
-    $('.fullscreen-button').after(centerWrapper);
-    
-    // Toggle button functionality
-    toggleButton.click(function() {
-        historyVisible = !historyVisible;
-        
-        if (historyVisible) {
-            historyContent.slideDown(300);
-            toggleButton.html('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>');
-            toggleButton.attr('title', 'Ocultar histórico');
-            historyPanel.removeClass('history-collapsed');
+    // Update fullscreen event handler
+    document.addEventListener('fullscreenchange', () => {
+        if (!document.fullscreenElement) {
+            container.classList.remove('fullscreen');
+            fullscreenHint.removeClass('show');
         } else {
-            historyContent.slideUp(300);
-            toggleButton.html('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
-            toggleButton.attr('title', 'Mostrar histórico');
-            historyPanel.addClass('history-collapsed');
+            container.classList.add('fullscreen');
         }
     });
-    
-    // Add event listeners for start/stop buttons
-    startButton.click(function() {
-        recordingHistory = true;
-        startButton.prop('disabled', true);
-        stopButton.prop('disabled', false);
+
+    // Move these declarations to the top
+    const container = document.getElementById('container');
+
+    // Fullscreen functionality
+    const fullscreenButton = document.querySelector('.fullscreen-button');
+
+    fullscreenButton.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+            if (container.requestFullscreen) {
+                container.requestFullscreen();
+            } else if (container.webkitRequestFullscreen) {
+                container.webkitRequestFullscreen();
+            } else if (container.msRequestFullscreen) {
+                container.msRequestFullscreen();
+            }
+            container.classList.add('fullscreen');
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+            container.classList.remove('fullscreen');
+        }
     });
-    
-    stopButton.click(function() {
-        recordingHistory = false;
-        historyItems = [];
-        historyList.empty();
-        startButton.prop('disabled', false);
-        stopButton.prop('disabled', true);
+
+    document.addEventListener('fullscreenchange', () => {
+        if (!document.fullscreenElement) {
+            container.classList.remove('fullscreen');
+        }
     });
-    
-    // Function to add item to history
-    window.addToHistory = function(item) {
-        if (!recordingHistory) return;
+
+    // Create history panel after fullscreen button is initialized
+    $(document).ready(function() {
+        var recordingHistory = false;
+        var historyItems = [];
+        var historyVisible = false;
         
-        historyItems.push(item);
+        // Create history panel
+        var historyPanel = $('<div>').attr('id', 'history-panel').addClass('history-panel history-collapsed');
+        var historyHeader = $('<div>').addClass('history-header');
+        var historyTitle = $('<h3>').text('Histórico');
         
-        var historyItem = $('<div>').addClass('history-item');
-        var itemNumber = $('<span>').addClass('history-number').text(item.fullscreenText + ": ");
-        var itemExplanation = $('<span>').addClass('history-explanation').text(item.explanation);
+        // Melhorar o botão de alternância com ícone e tooltip
+        var toggleButton = $('<button>')
+            .addClass('toggle-history-button')
+            .attr('title', 'Mostrar histórico')
+            .html('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
         
-        historyItem.append(itemNumber, itemExplanation);
-        historyList.prepend(historyItem); // Add new items at the top
-    };
+        historyHeader.append(historyTitle, toggleButton);
+        
+        var historyContent = $('<div>').addClass('history-content');
+        var historyList = $('<div>').addClass('history-list');
+        var historyControls = $('<div>').addClass('history-controls');
+        
+        // Create start and stop buttons with improved design
+        var startButton = $('<button>').addClass('history-button start-button')
+            .html('<div class="button-content"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg><span>Iniciar</span></div>')
+            .attr('title', 'Começar a registrar resultados');
+            
+        var stopButton = $('<button>').addClass('history-button stop-button')
+            .html('<div class="button-content"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg><span>Parar</span></div>')
+            .attr('title', 'Parar de registrar e limpar histórico')
+            .prop('disabled', true);
+        
+        historyControls.append(startButton, stopButton);
+        historyContent.append(historyList, historyControls);
+        historyPanel.append(historyHeader, historyContent);
+        
+        // Ocultar o conteúdo inicialmente
+        historyContent.hide();
+        
+        // Create a wrapper div for center alignment
+        var centerWrapper = $('<div>').addClass('history-center-wrapper');
+        centerWrapper.append(historyPanel);
+        
+        // Insert after fullscreen button
+        $('.fullscreen-button').after(centerWrapper);
+        
+        // Toggle button functionality
+        toggleButton.click(function() {
+            historyVisible = !historyVisible;
+            
+            if (historyVisible) {
+                historyContent.slideDown(300);
+                toggleButton.html('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>');
+                toggleButton.attr('title', 'Ocultar histórico');
+                historyPanel.removeClass('history-collapsed');
+            } else {
+                historyContent.slideUp(300);
+                toggleButton.html('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+                toggleButton.attr('title', 'Mostrar histórico');
+                historyPanel.addClass('history-collapsed');
+            }
+        });
+        
+        // Add event listeners for start/stop buttons
+        startButton.click(function() {
+            recordingHistory = true;
+            startButton.prop('disabled', true);
+            stopButton.prop('disabled', false);
+        });
+        
+        stopButton.click(function() {
+            recordingHistory = false;
+            historyItems = [];
+            historyList.empty();
+            startButton.prop('disabled', false);
+            stopButton.prop('disabled', true);
+        });
+        
+        // Function to add item to history
+        window.addToHistory = function(item) {
+            if (!recordingHistory) return;
+            
+            historyItems.push(item);
+            
+            var historyItem = $('<div>').addClass('history-item');
+            var itemNumber = $('<span>').addClass('history-number').text(item.fullscreenText + ": ");
+            var itemTerm = $('<span>').addClass('history-term').text(item.term);
+            var itemExplanation = $('<span>').addClass('history-explanation').text(" - " + item.explanation);
+            
+            historyItem.append(itemNumber, itemTerm, itemExplanation);
+            historyList.prepend(historyItem);
+        };
+    });
+
+    // Remove this duplicate block that's causing the error
+    // setTimeout(() => {
+    //     bullet.remove();
+    //     if (document.fullscreenElement) {
+    //         fullscreenHint.html(`<p>${item.explanation}</p>`);
+    //         fullscreenHint.addClass('show');
+    //         setTimeout(() => {
+    //             fullscreenHint.removeClass('show');
+    //         }, 5000);
+    //     } else {
+    //         modalResult.innerHTML = `<p>${item.explanation}</p>`;
+    //         showModal();
+    //     }
+    //     // ...rest of the code...
+    // }, 300);
 });
+
+// Adicionar spinWheel como função global
+function spinWheel() {
+    if (!spinning) {
+        $('#spin').click();
+    }
+}
 
 // Update the CSS for the history panel to position it properly
 const style = document.createElement('style');
@@ -522,6 +608,12 @@ style.textContent = `
 .history-number {
     font-weight: bold;
     color: #e65100;
+}
+
+.history-term {
+    font-style: italic;
+    color: #1976d2;
+    margin-left: 5px;
 }
 
 .history-explanation {
@@ -682,119 +774,3 @@ style.textContent = `
     background: rgba(255, 255, 255, 0.95);
 }
 `;
-
-// Fix: Need to update the main document ready function to call the addToHistory function
-$(document).ready(function() {
-    // Find the existing code for handling the spin result
-    var originalSpinFunction = $('#spin').click;
-    
-    $('#spin').off('click').click(function() {
-        if(!spinning) {
-            spinning = true;
-            $('.texto.selected').removeClass('selected');
-            
-            // Use global hideModal or a safe check
-            if (typeof hideModal === 'function') {
-                hideModal(); // Esconde o modal se estiver aberto
-            }
-            
-            var novoGrau = graus + Math.floor(Math.random() * 1800 + 1800);
-            
-            $('#interno-roleta').css({
-                'transform' : 'rotate(' + novoGrau + 'deg)'
-            });
-
-            setTimeout(function(){
-                spinning = false;
-                graus = novoGrau % 360;
-                
-                // Calculate which section the wheel landed on
-                var adjustedDegree = (360 - graus + 5.8) % 360;
-                var resultado = Math.floor((adjustedDegree / (360/wheelItems.length)));
-                if (resultado >= wheelItems.length) resultado = 0;
-                
-                // Get result from wheelItems
-                var item = wheelItems[resultado];
-                
-                // Use the globally accessible addToHistory function
-                if (window.addToHistory) {
-                    window.addToHistory(item);
-                }
-
-                // Criar a bolinha primeiro, mas manter invisível
-                const bullet = document.createElement('div');
-                bullet.className = 'bullet';
-                document.getElementById('container').appendChild(bullet);
-
-                // Posição inicial (centro do botão spin)
-                const container = document.getElementById('container');
-                const containerRect = container.getBoundingClientRect();
-                const spinButton = document.getElementById('spin');
-                const spinRect = spinButton.getBoundingClientRect();
-                const startX = spinRect.left - containerRect.left + spinRect.width / 2;
-                const startY = spinRect.top - containerRect.top + spinRect.height / 2;
-
-                // Função para mover a bolinha
-                function moveBullet(targetElement, bullet) {
-                    const targetRect = targetElement.getBoundingClientRect();
-                    const bulletRect = bullet.getBoundingClientRect();
-                    
-                    const targetX = targetRect.left + (targetRect.width / 2) - (bulletRect.width / 2);
-                    const targetY = targetRect.top + (targetRect.height / 2) - (bulletRect.height / 2);
-                    
-                    bullet.style.transform = `translate(${targetX}px, ${targetY}px)`;
-                    
-                    // Aguarda o tempo da animação antes de selecionar o número
-                    setTimeout(() => {
-                        document.querySelectorAll('.texto').forEach(el => el.classList.remove('selected'));
-                        targetElement.classList.add('selected');
-                    }, 200); // Ajustado para coincidir com o tempo da animação da bolinha
-                }
-
-                // Iniciar a animação da bolinha e seleção do número simultaneamente
-                requestAnimationFrame(() => {
-                    // Encontrar o elemento texto selecionado
-                    const selectedText = $('.texto').eq(resultado);
-                    const selectedElement = selectedText[0];
-                    
-                    // Calcular a posição final
-                    const targetRect = selectedElement.getBoundingClientRect();
-                    const targetX = targetRect.left - containerRect.left + (targetRect.width / 2);
-                    const targetY = targetRect.top - containerRect.top + (targetRect.height / 2);
-                    
-                    bullet.style.opacity = '1';
-                    bullet.style.transform = `translate(${targetX}px, ${targetY}px)`;
-                    selectedText.addClass('selected');
-                    
-                    // Remover a bolinha após a animação e mostrar o modal
-                    setTimeout(() => {
-                        bullet.remove();
-                        modalResult.innerHTML = `<h3>${item.fullscreenText}</h3><p>${item.explanation}</p>`;
-                        showModal();
-                        
-                        // Se não for "AGAIN", remover o item da roleta
-                        if (item.text !== "AG") {
-                            // Adicionamos um pequeno atraso para que a remoção ocorra após o modal ser mostrado
-                            setTimeout(() => {
-                                // Agora a função está acessível globalmente
-                                if (typeof removeItemAndRebuildWheel === 'function') {
-                                    removeItemAndRebuildWheel(resultado);
-                                } else {
-                                    console.error("A função removeItemAndRebuildWheel não está definida");
-                                }
-                            }, 500);
-                        }
-                    }, 300);
-                });
-
-            }, 6000);
-        }
-    });
-});
-
-// Adicionar spinWheel como função global
-function spinWheel() {
-    if (!spinning) {
-        $('#spin').click();
-    }
-}

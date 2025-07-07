@@ -438,23 +438,13 @@ h1::after {
     line-height: 1.6;
 }
 
-#modalResult h3 {
-    color: #ff41b8;
-    font-size: 32px;
-    margin-bottom: 20px;
-    text-shadow: 
-        0 0 10px rgba(255, 65, 184, 0.5),
-        0 2px 4px rgba(0, 0, 0, 0.3);
-    animation: glow 3s ease-in-out infinite;
-}
-
 #modalResult p {
     background: rgba(62, 84, 255, 0.1);
     padding: 20px;
     border-radius: 10px;
-    margin-top: 15px;
+    margin-top: 0;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    font-size: 18px;
+    font-size: 20px;
     line-height: 1.6;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
@@ -483,8 +473,7 @@ h1::after {
 }
 
 .fullscreen-button {
-    display: block;
-    margin: 20px auto;
+    position: relative;
     padding: 10px 20px;
     background-color: #4CAF50;
     color: white;
@@ -493,38 +482,139 @@ h1::after {
     cursor: pointer;
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
+    width: fit-content;
+    margin: 0 auto;
+    display: block;
 }
 
 .fullscreen-button:hover {
     background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+#container.fullscreen .fullscreen-button {
+    display: none; /* Hide the original fullscreen button when in fullscreen */
 }
 
 #container.fullscreen {
     width: 100vw;
     height: 100vh;
-    background-color: #f0f0f0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     margin: 0;
-    padding: 20px;
+    padding: 0;
+    display: flex;
+    position: relative;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+}
+
+/* Add control panel for fullscreen buttons */
+.fullscreen-controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+    z-index: 1001;
+}
+
+#container.fullscreen .spin-button-fullscreen {
+    position: static; /* Change from fixed to static */
+    padding: 15px 30px;
+    font-size: 1.2em;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.exit-fullscreen-button {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: none;
+}
+
+#container.fullscreen .exit-fullscreen-button {
+    display: block;
+}
+
+#container.fullscreen .header,
+#container.fullscreen .instructions,
+#container.fullscreen .history-center-wrapper {
+    display: none;
+}
+
+#container.fullscreen #roleta-wrapper {
+    position: absolute;
+    left: 250px; /* Reduced from 300px */
+    right: 50px; /* Added right margin to help center */
+    top: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #container.fullscreen #roleta {
-    width: 80vh;
-    height: 80vh;
-    max-width: 90vw;
-    max-height: 90vw;
-}
-
-#container.fullscreen .modal {
-    z-index: 1000;
+    margin: 0;
+    transform: scale(1.2);
 }
 
 #container.fullscreen .modal-content {
-    max-width: 80vw;
-    max-height: 80vh;
-    overflow-y: auto;
+    font-size: 1.5em;
+    padding: 40px;
+}
+
+.history-term {
+    font-weight: bold;
+    color: #ff41b8;
+    margin-right: 5px;
+}
+
+.history-explanation {
+    color: #333;
+}
+
+/* Novos estilos para o painel de dicas em tela cheia */
+.fullscreen-hint {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 300px;
+    height: 100vh;
+    background: rgba(15, 12, 41, 0.95);
+    padding: 20px;
+    color: #fff;
+    z-index: 1000;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    display: none;
+}
+
+#container.fullscreen .fullscreen-hint {
+    display: block;
+}
+
+.fullscreen-hint p {
+    font-size: 24px;
+    line-height: 1.6;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.5s ease-out;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    margin: 0;
+}
+
+.fullscreen-hint.show p {
+    opacity: 1;
+    transform: translateX(0);
 }
