@@ -199,14 +199,12 @@ $(document).ready(function(){
                             showModal();
                         }
                         
-                        // Se não for "AGAIN", remover o item da roleta
-                        if (item.text !== "AG") {
-                            setTimeout(() => {
-                                if (typeof removeItemAndRebuildWheel === 'function') {
-                                    removeItemAndRebuildWheel(resultado);
-                                }
-                            }, 500);
-                        }
+                        // Remover o item da roleta independentemente de ser "AG" ou não
+                        setTimeout(() => {
+                            if (typeof removeItemAndRebuildWheel === 'function') {
+                                removeItemAndRebuildWheel(resultado);
+                            }
+                        }, 500);
                     }, 300);
                 });
 
