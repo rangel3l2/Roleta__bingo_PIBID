@@ -485,6 +485,7 @@ h1::after {
     transition: all 0.3s ease;
     width: fit-content;
     margin: 0 auto;
+    margin-top: 20px;
     display: block;
 }
 

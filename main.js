@@ -459,6 +459,43 @@ function spinWheel() {
     }
 }
 
+// Função para montar a roleta usando os dados vindos da API (dados_roleta)
+function montarRoletaComOpcoes(opcoes) {
+    var $interno = $('#interno-roleta');
+    $interno.empty();
+
+    const totalSections = opcoes.length;
+    const anglePerSection = 360 / totalSections;
+
+    for (let i = 0; i < totalSections; i++) {
+        // Cada opção é um array: [Id_categoria, titulo, descricao, displayed_category]
+        let section = $('<div>').addClass('sec');
+        let text = $('<span>').addClass('texto').text(opcoes[i][3]); // displayed_category (número ou AG)
+        section.append(text);
+        section.css('transform', `rotate(${i * anglePerSection}deg)`);
+        $interno.append(section);
+    }
+
+    // Salva os dados completos para uso posterior (ex: ao girar a roleta)
+    window.dadosRoletaAtuais = opcoes;
+}
+
+// Exporte a função para uso externo
+window.montarRoletaComOpcoes = montarRoletaComOpcoes;
+
+// Ao girar a roleta, para mostrar o modal corretamente, use:
+function mostrarModalRoleta(idx) {
+    // idx é o índice da opção sorteada
+    const item = window.dadosRoletaAtuais[idx];
+    if (!item) return;
+    const titulo = item[1];      // coluna titulo
+    const descricao = item[2];   // coluna descricao
+    // Exemplo de uso:
+    $('#modalResult').html(`<strong>${titulo}</strong><br>${descricao}`);
+    // ...código para exibir o modal...
+}
+window.mostrarModalRoleta = mostrarModalRoleta;
+
 // Update the CSS for the history panel to position it properly
 const style = document.createElement('style');
 style.textContent = `
