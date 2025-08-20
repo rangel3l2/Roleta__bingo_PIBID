@@ -17,3 +17,6 @@ app.add_middleware(
 )
 
 app.include_router(sheet_routes.router, prefix="/api/v1/sheets", tags=["sheets"])
+
+# Para Vercel: handler para serverless
+handler = app
