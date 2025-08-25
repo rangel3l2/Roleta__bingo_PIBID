@@ -1,13 +1,21 @@
 import os
+import sys
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from app.api.v1.sheet_routes import router
+from mangum import Mangum
 
-# Initialize FastAPI app with root path
-app = FastAPI(root_path="/api")
+# Add the backend directory to Python path
+BACKEND_DIR = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(BACKEND_DIR)
 
-# Updated CORS for Vercel deployment
+# Load environment variables
+from dotenv import load_dotenv
+load_dotenv()
+
+# Initialize FastAPI app
+app = FastAPI()
+
+# CORS configuration
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -16,11 +24,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount routes
-app.include_router(router, prefix="/v1/sheets", tags=["sheets"])
+# Import routes after CORS setup
+from app.api.v1.sheet_routes import router
 
-# Only mount static files in development
-if os.getenv("VERCEL_ENV") != "production":
-    FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
-    if os.path.exists(FRONTEND_DIR):
-        app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
+# Mount routes
+app.include_router(router, prefix="/api/v1/sheets", tags=["sheets"])
+
+# Handler for serverless
+handler = Mangum(app)
