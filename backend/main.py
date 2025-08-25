@@ -2,15 +2,12 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-
-# Get root directory
-ROOT_DIR = os.path.dirname(os.path.dirname(__file__))
-FRONTEND_DIR = os.path.join(ROOT_DIR, "frontend")
+from app.api.v1.sheet_routes import router
 
 # Initialize FastAPI app
 app = FastAPI()
 
-# CORS configuration
+# Updated CORS for Vercel deployment
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -19,12 +16,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Import routes after CORS setup
-from app.api.v1.sheet_routes import router
-
-# Mount routes and static files
+# Mount routes
 app.include_router(router, prefix="/api/v1/sheets", tags=["sheets"])
-if os.path.exists(FRONTEND_DIR):
-    app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
-else:
-    print(f"Warning: Frontend directory not found at {FRONTEND_DIR}")
+
+# Only mount static files in development
+if os.getenv("VERCEL_ENV") != "production":
+    FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
+    if os.path.exists(FRONTEND_DIR):
+        app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
