@@ -4,8 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from app.api.v1.sheet_routes import router
 
-# Initialize FastAPI app
-app = FastAPI()
+# Initialize FastAPI app with root path
+app = FastAPI(root_path="/api")
 
 # Updated CORS for Vercel deployment
 app.add_middleware(
@@ -17,7 +17,7 @@ app.add_middleware(
 )
 
 # Mount routes
-app.include_router(router, prefix="/api/v1/sheets", tags=["sheets"])
+app.include_router(router, prefix="/v1/sheets", tags=["sheets"])
 
 # Only mount static files in development
 if os.getenv("VERCEL_ENV") != "production":

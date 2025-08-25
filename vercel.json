@@ -8,8 +8,11 @@
   ],
   "routes": [
     {
-      "src": "/api/v1/sheets/(.*)",
+      "src": "/api/(.*)",
       "dest": "backend/main.py"
+    },
+    {
+      "handle": "filesystem"
     },
     {
       "src": "/(.*)",
