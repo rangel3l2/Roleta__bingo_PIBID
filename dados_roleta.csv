@@ -1,0 +1,32 @@
+id_categoria,titulo,descricao,displayed_category
+1,AGAIN,Você tem direito a uma nova rodada! Gire novamente.,AG
+2,Vesícula Seminal,Glândula que produz parte do líquido seminal rico em nutrientes para os espermatozoides.,1
+3,Tubas Uterinas,Tubos que conectam os ovários ao útero e são local de fecundação.,2
+4,Ovários,Glândulas femininas que produzem ovócitos e hormônios sexuais.,3
+5,Vagina,Canal que conecta o útero ao exterior por onde passam os espermatozoides e a menstruação e por onde ocorre o parto.,4
+6,Epidídimo,Local onde os espermatozoides amadurecem e são armazenados.,5
+7,Pênis,Canal pelo qual a urina e o sêmen são expelidos no sistema reprodutor masculino.,6
+8,Janela da Fertilidade,Fase do ciclo menstrual com maior chance de engravidar ocorrendo em torno da ovulação.,7
+9,AGAIN,Você tem direito a uma nova rodada! Gire novamente.,AG
+10,Endométrio,Camada interna do útero onde o embrião se implanta; é descamado durante a menstruação se não houver fecundação.,8
+11,Testículos,Órgãos que produzem espermatozoides e testosterona fundamentais para a reprodução e desenvolvimento de características sexuais masculinas.,9
+12,Escroto,Bolsa que contém e protege os testículos regulando sua temperatura para a produção de espermatozoides.,10
+13,Menstruação,Descamação periódica do endométrio parte do ciclo menstrual feminino.,11
+14,Ductos deferentes,Canais que transportam espermatozoides dos testículos até a uretra.,12
+15,Ejaculação,Processo pelo qual o sêmen é expelido através da uretra durante o orgasmo.,13
+16,AGAIN,Você tem direito a uma nova rodada! Gire novamente.,AG
+17,Sêmen,Fluido que contém espermatozoides e é liberado durante a ejaculação.,14
+18,Fecundação,União do gameta masculino (espermatozoide) com o gameta feminino (ovócito) para formar um novo ser.,15
+19,Uretra,Órgão masculino responsável pela excreção de urina e deposição do sêmen no trato reprodutivo feminino.,16
+20,Útero,Órgão muscular feminino onde o feto se desenvolve durante a gravidez.,17
+21,Próstata,Glândula masculina que produz parte do líquido seminal e envolve a uretra.,18
+22,Espermatozoide,Célula reprodutora masculina que fecunda o óvulo.,19
+23,AGAIN,Você tem direito a uma nova rodada! Gire novamente.,AG
+24,Óvulo,Célula reprodutora feminina que quando fecundada desenvolve-se em um embrião.,20
+25,Clitóris,Órgão feminino altamente sensível importante para o prazer sexual.,21
+26,Hímens,Dobras de pele que protegem a entrada da vagina.,22
+27,Genitais Femininos Externos,Conjunto de órgãos genitais externos femininos.,23
+28,Hormônios Sexuais,Substâncias que regulam as funções reprodutivas e características sexuais secundárias.,24
+29,Puberdade,Período de desenvolvimento em que o corpo se torna capaz de reprodução.,25
+30,Placenta,Órgão temporário que fornece oxigênio e nutrientes ao feto durante a gravidez.,26
+31,Cordão Umbilical,Estrutura que conecta o feto à placenta transportando nutrientes e resíduos.,27

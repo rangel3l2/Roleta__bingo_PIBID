@@ -1,0 +1,19 @@
+# Virtual Environment
+.venv/
+venv/
+
+# Environment and Credentials
+.env
+.env.local
+backend/.env
+backend/credentials.json
+backend/credencials.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Vercel
+.vercel
