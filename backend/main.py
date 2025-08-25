@@ -1,34 +1,26 @@
 import os
-import sys
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from mangum import Mangum
+from flask import Flask, jsonify
+from flask_cors import CORS
+from app.services.sheet_service import SheetService
 
-# Add the backend directory to Python path
-BACKEND_DIR = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(BACKEND_DIR)
+app = Flask(__name__)
+CORS(app)
 
-# Load environment variables
-from dotenv import load_dotenv
-load_dotenv()
+@app.route('/api/v1/sheets/parameto_roleta')
+def get_parameto_roleta():
+    try:
+        data = SheetService().get_sheet_data("parameto_roleta")
+        return jsonify({"values": data})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-# Initialize FastAPI app
-app = FastAPI()
+@app.route('/api/v1/sheets/dados_roleta')
+def get_dados_roleta():
+    try:
+        data = SheetService().get_sheet_data("dados_roleta")
+        return jsonify({"values": data})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-# CORS configuration
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# Import routes after CORS setup
-from app.api.v1.sheet_routes import router
-
-# Mount routes
-app.include_router(router, prefix="/api/v1/sheets", tags=["sheets"])
-
-# Handler for serverless
-handler = Mangum(app)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8000)
